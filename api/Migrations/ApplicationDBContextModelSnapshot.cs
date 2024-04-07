@@ -20,6 +20,39 @@ namespace api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("api.Models.Job", b =>
+                {
+                    b.Property<int>("JobId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobId"));
+
+                    b.Property<decimal>("JobBudget")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("JobDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("JobId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Jobs");
+                });
+
             modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -43,6 +76,17 @@ namespace api.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("api.Models.Job", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,6 @@
 
+using api.Interfaces;
+using api.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDBContext>(options=>{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<IJobRepository,JobRepository>();
 
 var app = builder.Build();
 
