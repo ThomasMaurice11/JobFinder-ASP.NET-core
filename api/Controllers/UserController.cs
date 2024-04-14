@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using api.Dtos.User;
 using api.Interfaces;
 using api.Mappers;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
+  //  [EnableCors(origins: "http://localhost:3000", headers: "*", methods: "*")]
       [Route("api/user")]
     [ApiController]
     

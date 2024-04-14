@@ -15,13 +15,37 @@ namespace api.Mappers
                  JobId=jobModel.JobId,
                 UserId=jobModel.UserId,
                 JobTitle=jobModel.JobTitle,
-                Type=jobModel.Type,
+                JobType=jobModel.JobType,
                 JobBudget=jobModel.JobBudget,
                 JobDescription=jobModel.JobDescription,
+                CreationDate=jobModel.CreationDate,
+                NumberOfProposals=jobModel.NumberOfProposals,
 
-
-
+  
             };
         }
+           public static Job ToJobFromCreate(this CreateJobDto jobDto,int userId){
+            return new Job {
+
+                 
+                UserId=userId,
+                JobTitle=jobDto.JobTitle,
+                JobType=jobDto.JobType,
+                JobBudget=jobDto.JobBudget,
+                JobDescription=jobDto.JobDescription,
+              
+
+  
+            };
+        }
+        //  public static Job ToJobFromUpdate(this UpdateJobRequestDto jobDto, int JobId)
+        // {
+        //     return new Job
+        //     {
+        //         Title = JobDto.Title,
+        //         Content = commentDto.Content,
+        //         StockId = stockId
+        //     };
+        // }
     }
 }
