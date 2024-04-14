@@ -19,7 +19,7 @@ namespace api.Models
 
 
       public int JobId { get; set; }
-    public int UserId { get; set; }
+      public string AppUserId { get; set; }
     public string JobTitle { get; set; }=string.Empty ;
     public string JobType { get; set; } =string.Empty ;
     public decimal JobBudget { get; set; }
@@ -27,11 +27,9 @@ namespace api.Models
     public string JobDescription { get; set; }=string.Empty ;
     public int NumberOfProposals { get; set; } 
 
-    //  public int IsVerifed { get; set; }=0 ; 
-    public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
-
-
-
- 
+     public int IsVerifed { get; set; }=0 ; 
+   
+        public AppUser AppUser { get; set; }
+      
     }
 }

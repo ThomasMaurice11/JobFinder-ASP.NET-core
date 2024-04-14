@@ -50,19 +50,19 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7beb5fbf-c75e-47b2-a2d4-0e938b0ad06b",
+                            Id = "bfc2999c-2157-4f26-b961-955f68174629",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7ee1e134-486b-48f6-ad1c-9dc85df3e95d",
+                            Id = "a8f1eb5a-9afb-4bb5-ab96-86d35e4acc2e",
                             Name = "Emplpoyer",
                             NormalizedName = "EMPLOYER"
                         },
                         new
                         {
-                            Id = "b4315024-c0e6-42a1-9d71-b1793a6b0aca",
+                            Id = "e219bd67-5167-4374-b4bc-172312c4a404",
                             Name = "JobSeeker",
                             NormalizedName = "JOBSEEKER"
                         });
@@ -247,8 +247,15 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobId"));
 
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IsVerifed")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("JobBudget")
                         .HasColumnType("decimal(18,2)");
@@ -268,52 +275,11 @@ namespace api.Migrations
                     b.Property<int>("NumberOfProposals")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("JobId");
 
+                    b.HasIndex("AppUserId");
+
                     b.ToTable("Jobs");
-                });
-
-            modelBuilder.Entity("api.Models.Portfolio", b =>
-                {
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AppUserId", "JobId");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("Portfolios");
-                });
-
-            modelBuilder.Entity("api.Models.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -367,33 +333,15 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.Portfolio", b =>
+            modelBuilder.Entity("api.Models.Job", b =>
                 {
                     b.HasOne("api.Models.AppUser", "AppUser")
-                        .WithMany("Portfolios")
+                        .WithMany()
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("api.Models.Job", "Job")
-                        .WithMany("Portfolios")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AppUser");
-
-                    b.Navigation("Job");
-                });
-
-            modelBuilder.Entity("api.Models.AppUser", b =>
-                {
-                    b.Navigation("Portfolios");
-                });
-
-            modelBuilder.Entity("api.Models.Job", b =>
-                {
-                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }

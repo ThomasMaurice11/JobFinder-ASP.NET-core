@@ -13,22 +13,22 @@ namespace api.Mappers
             return new JobDto {
 
                  JobId=jobModel.JobId,
-                UserId=jobModel.UserId,
-                JobTitle=jobModel.JobTitle,
+                 JobTitle=jobModel.JobTitle,
                 JobType=jobModel.JobType,
                 JobBudget=jobModel.JobBudget,
                 JobDescription=jobModel.JobDescription,
                 CreationDate=jobModel.CreationDate,
                 NumberOfProposals=jobModel.NumberOfProposals,
+                 CreatedBy = jobModel.AppUser.UserName
 
   
             };
         }
-           public static Job ToJobFromCreate(this CreateJobDto jobDto,int userId){
+           public static Job ToJobFromCreate(this CreateJobDto jobDto){
             return new Job {
 
                  
-                UserId=userId,
+              
                 JobTitle=jobDto.JobTitle,
                 JobType=jobDto.JobType,
                 JobBudget=jobDto.JobBudget,
@@ -38,7 +38,7 @@ namespace api.Mappers
   
             };
         }
-        //  public static Job ToJobFromUpdate(this UpdateJobRequestDto jobDto, int JobId)
+        //  public static Job ToJobFromUpdate(this UpdateJobRequestDto jobDto)
         // {
         //     return new Job
         //     {

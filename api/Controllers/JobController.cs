@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos.Job;
+using api.Extensions;
 using api.Interfaces;
 using api.Mappers;
+using api.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -16,12 +20,15 @@ namespace api.Controllers
     {
          private readonly ApplicationDBContext _context;
         private readonly IJobRepository _jobRepo ;
-          private readonly IUserRepository _userRepo ;
-      public JobController(ApplicationDBContext context,IJobRepository jobRepo,IUserRepository userRepo)
+         
+          private readonly UserManager<AppUser> _userManager;
+          
+      public JobController(ApplicationDBContext context,IJobRepository jobRepo,UserManager<AppUser> userManager)
       {
         _jobRepo=jobRepo ;
-        _userRepo=userRepo;
+        
         _context = context;
+        _userManager = userManager;
 
       }
        [HttpGet]
@@ -42,15 +49,17 @@ namespace api.Controllers
             return Ok(job.ToJobDto());
 
            }
-                 [HttpPost("{UserId}")]
-            public async Task<IActionResult> Create([FromRoute] int UserId, CreateJobDto jobDto)
+                 [HttpPost]
+                 [Authorize]
+            public async Task<IActionResult> Create(CreateJobDto jobDto)
 {
-    if (!await _userRepo.UserExists(UserId))
-    {
-        return BadRequest("User does not exist");
-    }
+  
+       var username = User.GetUsername();
+       var appUser = await _userManager.FindByNameAsync(username);
 
-    var jobModel = jobDto.ToJobFromCreate(UserId);
+    var jobModel = jobDto.ToJobFromCreate();
+
+    jobModel.AppUserId=appUser.Id;
     
     // Assuming CreateAsync returns a Task and you're not using its result here.
     // You might want to handle errors or check its result.

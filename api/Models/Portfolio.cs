@@ -12,6 +12,6 @@ namespace api.Models
         public string AppUserId { get; set; }
         public int JobId { get; set; }
         public AppUser AppUser { get; set; }
-        public Job Job { get; set; }
+        // public Job Job { get; set; }
     }
 }

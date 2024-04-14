@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class PortfolioManyToMany : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -50,40 +50,6 @@ namespace api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Jobs",
-                columns: table => new
-                {
-                    JobId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumberOfProposals = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Jobs", x => x.JobId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,26 +159,28 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Portfolios",
+                name: "Jobs",
                 columns: table => new
                 {
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     JobId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumberOfProposals = table.Column<int>(type: "int", nullable: false),
+                    IsVerifed = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Portfolios", x => new { x.AppUserId, x.JobId });
+                    table.PrimaryKey("PK_Jobs", x => x.JobId);
                     table.ForeignKey(
-                        name: "FK_Portfolios_AspNetUsers_AppUserId",
+                        name: "FK_Jobs_AspNetUsers_AppUserId",
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Portfolios_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
-                        principalColumn: "JobId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -221,9 +189,9 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "7beb5fbf-c75e-47b2-a2d4-0e938b0ad06b", null, "Admin", "ADMIN" },
-                    { "7ee1e134-486b-48f6-ad1c-9dc85df3e95d", null, "Emplpoyer", "EMPLOYER" },
-                    { "b4315024-c0e6-42a1-9d71-b1793a6b0aca", null, "JobSeeker", "JOBSEEKER" }
+                    { "a8f1eb5a-9afb-4bb5-ab96-86d35e4acc2e", null, "Emplpoyer", "EMPLOYER" },
+                    { "bfc2999c-2157-4f26-b961-955f68174629", null, "Admin", "ADMIN" },
+                    { "e219bd67-5167-4374-b4bc-172312c4a404", null, "JobSeeker", "JOBSEEKER" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -266,9 +234,9 @@ namespace api.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Portfolios_JobId",
-                table: "Portfolios",
-                column: "JobId");
+                name: "IX_Jobs_AppUserId",
+                table: "Jobs",
+                column: "AppUserId");
         }
 
         /// <inheritdoc />
@@ -290,19 +258,13 @@ namespace api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Portfolios");
-
-            migrationBuilder.DropTable(
-                name: "Users");
+                name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Jobs");
         }
     }
 }

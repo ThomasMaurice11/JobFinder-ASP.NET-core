@@ -47,7 +47,7 @@ namespace api.Repository
 
         public async Task<List<Job>> GetAllAsync()
         {
-            return await _context.Jobs.ToListAsync() ;
+            return await _context.Jobs.Include(a=>a.AppUser).ToListAsync() ;
         }
 
 
@@ -55,7 +55,7 @@ namespace api.Repository
 
           public async Task<Job?> GetByIdAsync(int id)
         {
-           return await _context.Jobs.FindAsync(id);
+           return await _context.Jobs.Include(a=>a.AppUser).FirstOrDefaultAsync(c=>c.JobId ==id);
         }
 
         // public Task<Job?> UpdateAsync(int id, Job jobModel)
