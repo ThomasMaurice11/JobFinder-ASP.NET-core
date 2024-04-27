@@ -19,7 +19,8 @@ namespace api.Mappers
                 JobDescription=jobModel.JobDescription,
                 CreationDate=jobModel.CreationDate,
                 NumberOfProposals=jobModel.NumberOfProposals,
-                 CreatedBy = jobModel.AppUser.UserName
+                jobStatus=jobModel.jobStatus
+                 
 
   
             };
@@ -47,5 +48,15 @@ namespace api.Mappers
         //         StockId = stockId
         //     };
         // }
+
+         public static Job ToJobFromUpdate(this UpdateJobRequestDto jobDto, int JobId)
+        {
+            return new Job
+            {
+                jobStatus = jobDto.jobStatus,
+               
+            };
+        
     }
+}
 }

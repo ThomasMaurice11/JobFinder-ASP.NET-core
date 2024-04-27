@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240425135500_init3")]
+    partial class init3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,19 +53,19 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3da16bc6-8490-40e2-84c1-dfead9d42f67",
+                            Id = "8e7405b1-914a-41b7-91c6-8ce6f79a9064",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "87f42ad1-f90d-4205-958e-8e7db8f657d8",
+                            Id = "242e533c-1bd5-46f9-b7e3-0379b2302f4f",
                             Name = "Emplpoyer",
                             NormalizedName = "EMPLOYER"
                         },
                         new
                         {
-                            Id = "3d5c2918-45d7-4d15-8ef5-d6e85087025a",
+                            Id = "0eef7f90-99a8-4129-9ab8-5bf703fce6c2",
                             Name = "JobSeeker",
                             NormalizedName = "JOBSEEKER"
                         });
@@ -215,10 +218,6 @@ namespace api.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

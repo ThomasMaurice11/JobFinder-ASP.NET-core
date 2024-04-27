@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Models
 {
-    public class AppUser :IdentityUser
-    {
-        //   public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
-    }
+  public class AppUser : IdentityUser
+{
+    public List<Portfolio> Portfolios { get; set; } = new List<Portfolio>();
+    public string Role { get; set; } = string.Empty;
+    public List<Proposal> Proposals { get; set; } = new List<Proposal>();
+}
 }

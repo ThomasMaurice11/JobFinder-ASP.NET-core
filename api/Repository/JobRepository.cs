@@ -45,10 +45,10 @@ namespace api.Repository
 
        
 
-        public async Task<List<Job>> GetAllAsync()
-        {
-            return await _context.Jobs.Include(a=>a.AppUser).ToListAsync() ;
-        }
+        // public async Task<List<Job>> GetAllAsync()
+        // {
+        //     return await _context.Jobs.Include(a=>a.AppUser).ToListAsync() ;
+        // }
 
 
        
@@ -56,6 +56,12 @@ namespace api.Repository
           public async Task<Job?> GetByIdAsync(int id)
         {
            return await _context.Jobs.Include(a=>a.AppUser).FirstOrDefaultAsync(c=>c.JobId ==id);
+        }
+
+        public async Task<Job?> GetByJobTitleAsync(string jobTitle)
+        {
+            return await _context.Jobs.FirstOrDefaultAsync(s => s.JobTitle == jobTitle);
+            // return await _context.Jobs.FirstOrDefaultAsync(j =>)
         }
 
         // public Task<Job?> UpdateAsync(int id, Job jobModel)
@@ -74,11 +80,36 @@ namespace api.Repository
 
         //     return existingJob;
         // }
+        public async Task<IEnumerable<Job>> GetJobsByUserIdAsync(string userId)
+        {
+            // Retrieve jobs associated with the specified user ID
+            var jobs = await _context.Jobs
+                .Where(j => j.AppUserId == userId)
+                .ToListAsync();
 
+            return jobs;
+        }
 
+       public async Task<IEnumerable<Job>> GetAllAsync()
+        {
+             return await _context.Jobs.ToListAsync();
+        }
 
+        public async Task<Job?> UpdateAsync(int id, Job jobModel)
+        {
+           var existingComment = await _context.Jobs.FindAsync(id);
 
+            if (existingComment == null)
+            {
+                return null;
+            }
 
-       
+            existingComment.jobStatus = jobModel.jobStatus;
+            
+
+            await _context.SaveChangesAsync();
+
+            return existingComment;
+        }
     }
 }

@@ -165,13 +165,13 @@ namespace api.Migrations
                     JobId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    JobType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    JobType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     JobBudget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     NumberOfProposals = table.Column<int>(type: "int", nullable: false),
-                    IsVerifed = table.Column<int>(type: "int", nullable: false)
+                    jobStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -184,14 +184,76 @@ namespace api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Portfolios",
+                columns: table => new
+                {
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    JobId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Portfolios", x => new { x.AppUserId, x.JobId });
+                    table.ForeignKey(
+                        name: "FK_Portfolios_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Portfolios_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "JobId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Proposals",
+                columns: table => new
+                {
+                    JobId = table.Column<int>(type: "int", nullable: false),
+                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProposalId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReceiverId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SenderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescribeYourself = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Attachment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProposalStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Proposals", x => new { x.SenderId, x.JobId });
+                    table.ForeignKey(
+                        name: "FK_Proposals_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Proposals_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Proposals_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "JobId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a8f1eb5a-9afb-4bb5-ab96-86d35e4acc2e", null, "Emplpoyer", "EMPLOYER" },
-                    { "bfc2999c-2157-4f26-b961-955f68174629", null, "Admin", "ADMIN" },
-                    { "e219bd67-5167-4374-b4bc-172312c4a404", null, "JobSeeker", "JOBSEEKER" }
+                    { "07d78ef4-afc9-456b-9516-279ea43fc083", null, "JobSeeker", "JOBSEEKER" },
+                    { "bc5f4f3e-0520-451e-91a3-29b8ce9110a1", null, "Emplpoyer", "EMPLOYER" },
+                    { "daa2f179-789a-44c8-a18f-309844968ee7", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -237,6 +299,21 @@ namespace api.Migrations
                 name: "IX_Jobs_AppUserId",
                 table: "Jobs",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Portfolios_JobId",
+                table: "Portfolios",
+                column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Proposals_JobId",
+                table: "Proposals",
+                column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Proposals_ReceiverId",
+                table: "Proposals",
+                column: "ReceiverId");
         }
 
         /// <inheritdoc />
@@ -258,10 +335,16 @@ namespace api.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "Portfolios");
+
+            migrationBuilder.DropTable(
+                name: "Proposals");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

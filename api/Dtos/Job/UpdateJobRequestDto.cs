@@ -7,13 +7,15 @@ namespace api.Dtos.Job
 {
     public class UpdateJobRequestDto
     {
-          // public int? UserId { get; set; }
-    public string JobTitle { get; set; }=string.Empty ;
-    public string JobType { get; set; } =string.Empty ;
-    public decimal JobBudget { get; set; }
-    // public DateTime CreationDate { get; set; }=DateTime.Now;
-    public string JobDescription { get; set; }=string.Empty ;
-    // public int NumberOfProposals { get; set; } 
+          
+    // public string JobTitle { get; set; }=string.Empty ;
+    // public string JobType { get; set; } =string.Empty ;
+    // public decimal JobBudget { get; set; }
+   
+    // public string JobDescription { get; set; }=string.Empty ;
+    public string jobStatus { get; set; }=string.Empty ;
+
+   
     
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using api.Service;
 using Microsoft.OpenApi.Models;
+using api.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,10 @@ builder.Services.AddSwaggerGen(option =>
 // builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IPortfolioRepository,PortfolioRepository>();
+builder.Services.AddScoped<IProposalRepository,ProposalRepository>();
+builder.Services.AddScoped<IMessageRepository,SendMessageRepository>();
+
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>  
 {
     // options.Password.RequireDigit = true;

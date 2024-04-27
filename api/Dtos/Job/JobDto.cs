@@ -29,8 +29,8 @@ namespace api.Dtos.Job
     public string JobDescription { get; set; }=string.Empty ;
     public int NumberOfProposals { get; set; } =0;
 
-     public int IsVerifed { get; set; }=0 ; 
-      public string CreatedBy { get; set; } = string.Empty;
+     public string jobStatus { get; set; }="pending" ; 
+     
    
     }
 }

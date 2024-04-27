@@ -65,6 +65,7 @@ namespace api.Controllers
                 {
                     UserName = registerDto.Username,
                     Email = registerDto.Email,
+                     Role = registerDto.Role 
                 };
 
                 var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
@@ -98,7 +99,87 @@ namespace api.Controllers
                 return StatusCode(500, e);
             }
         }
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var userDtos = users.Select(user => new UserDto
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                Id=user.Id 
+                
+                // Role = user // Assuming Role is a property in the AppUser model
+            }).ToList();
+
+            return Ok(userDtos);
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto updateUserDto)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound($"User with ID {id} not found.");
+            }
+
+            user.UserName = updateUserDto.UserName;
+            user.Email = updateUserDto.Email;
+            // Update other user properties as needed
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return NoContent(); // Successfully updated
+            }
+            else
+            {
+                return StatusCode(500, result.Errors); // Error occurred while updating
+            }
+        }
+        [HttpDelete("delete/{id}")]
+public async Task<IActionResult> DeleteUser(string id)
+{
+    var user = await _userManager.FindByIdAsync(id);
+    if (user == null)
+    {
+        return NotFound($"User with ID {id} not found.");
+    }
+
+    var result = await _userManager.DeleteAsync(user);
+    if (result.Succeeded)
+    {
+        return NoContent(); // Successfully deleted
+    }
+    else
+    {
+        return StatusCode(500, result.Errors); // Error occurred while deleting
+    }
+}
+
+[HttpGet("{id}")]
+public async Task<IActionResult> GetUserById(string id)
+{
+    var user = await _userManager.FindByIdAsync(id);
+    if (user == null)
+    {
+        return NotFound($"User with ID {id} not found.");
+    }
+
+    var userDto = new UserDto
+    {
+        UserName = user.UserName,
+        Email = user.Email,
+        Id = user.Id
+        // Include other properties as needed
+    };
+
+    return Ok(userDto);
+
+
 
         
     }
+}
 }
