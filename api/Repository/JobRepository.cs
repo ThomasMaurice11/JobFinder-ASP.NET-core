@@ -5,29 +5,33 @@ using System.Threading.Tasks;
 using api.Dtos.Job;
 using api.Interfaces;
 using api.Models;
+using api.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace api.Repository
 {
-  
-    public class JobRepository :IJobRepository 
+
+    public class JobRepository : IJobRepository
     {
-         private readonly ApplicationDBContext _context ;
-        public JobRepository(ApplicationDBContext context)
+        private readonly ApplicationDBContext _context;
+        private readonly EncryptionService _encryptionService;
+
+        public JobRepository(ApplicationDBContext context, EncryptionService encryptionService)
         {
-            _context=context ;
+            _context = context;
+            _encryptionService = encryptionService;
         }
 
         public async Task<Job> CreateAsync(Job jobModel)
         {
-           await _context.Jobs.AddAsync(jobModel);
-           await _context.SaveChangesAsync();
-           return jobModel ;
+            jobModel.JobTitle = _encryptionService.Encrypt(jobModel.JobTitle);
+            await _context.Jobs.AddAsync(jobModel);
+            await _context.SaveChangesAsync();
+            return jobModel;
         }
 
-      
 
         public async Task<Job?> DeleteAsync(int id)
         {
@@ -43,7 +47,7 @@ namespace api.Repository
             return jobModel;
         }
 
-       
+
 
         // public async Task<List<Job>> GetAllAsync()
         // {
@@ -51,11 +55,16 @@ namespace api.Repository
         // }
 
 
-       
 
-          public async Task<Job?> GetByIdAsync(int id)
+
+        public async Task<Job?> GetByIdAsync(int id)
         {
-           return await _context.Jobs.Include(a=>a.AppUser).FirstOrDefaultAsync(c=>c.JobId ==id);
+            var job = await _context.Jobs.FindAsync(id);
+            if (job != null)
+            {
+                job.JobTitle = _encryptionService.Decrypt(job.JobTitle);
+            }
+            return job;
         }
 
         public async Task<Job?> GetByJobTitleAsync(string jobTitle)
@@ -90,26 +99,23 @@ namespace api.Repository
             return jobs;
         }
 
-       public async Task<IEnumerable<Job>> GetAllAsync()
+        public async Task<IEnumerable<Job>> GetAllAsync()
         {
-             return await _context.Jobs.ToListAsync();
+            var jobs = await _context.Jobs.ToListAsync();
+            jobs.ForEach(j => j.JobTitle = _encryptionService.Decrypt(j.JobTitle));
+            return jobs;
         }
 
         public async Task<Job?> UpdateAsync(int id, Job jobModel)
         {
-           var existingComment = await _context.Jobs.FindAsync(id);
-
-            if (existingComment == null)
+            var existingJob = await _context.Jobs.FindAsync(id);
+            if (existingJob == null)
             {
                 return null;
             }
-
-            existingComment.jobStatus = jobModel.jobStatus;
-            
-
+            existingJob.JobTitle = _encryptionService.Encrypt(jobModel.JobTitle);
             await _context.SaveChangesAsync();
-
-            return existingComment;
+            return existingJob;
         }
     }
 }
