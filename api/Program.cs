@@ -50,6 +50,15 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+
+// Add Encryption Service
+builder.Services.AddSingleton<EncryptionService>(provider =>
+{
+    return new EncryptionService();
+});
+
+
 // builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
