@@ -147,3 +147,6 @@ C:\Users\thoma\Desktop\api .net\api\bin\Debug\net8.0\Microsoft.AspNetCore.Identi
 C:\Users\thoma\Desktop\api .net\api\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\thoma\Desktop\api .net\api\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\thoma\Desktop\api .net\api\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\Youssef\Downloads\JobFinder-ASP.NET-core\api\obj\Debug\net8.0\api.dll
+C:\Users\Youssef\Downloads\JobFinder-ASP.NET-core\api\obj\Debug\net8.0\refint\api.dll
+C:\Users\Youssef\Downloads\JobFinder-ASP.NET-core\api\obj\Debug\net8.0\api.pdb
