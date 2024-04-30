@@ -50,14 +50,20 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+builder.Services.AddSingleton<EncryptionService>(provider =>
+{
+    return new EncryptionService();
+});
+
 // builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IPortfolioRepository,PortfolioRepository>();
-builder.Services.AddScoped<IProposalRepository,ProposalRepository>();
-builder.Services.AddScoped<IMessageRepository,SendMessageRepository>();
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>();
+builder.Services.AddScoped<IProposalRepository, ProposalRepository>();
+builder.Services.AddScoped<IMessageRepository, SendMessageRepository>();
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>  
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     // options.Password.RequireDigit = true;
     // options.Password.RequireLowercase = true;
@@ -126,7 +132,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 // Use CORS
- app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseCors("AllowLocalhost3000");
 app.UseAuthentication();
 app.UseAuthorization();
